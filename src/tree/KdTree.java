@@ -19,9 +19,19 @@ public class KdTree {
 		 pointManager = new PointManager();
 		 points = pointManager.getPoints();
 		 
+		 for(PointCreator point : points) {
+			 System.out.println(point);
+		 }
+		 
+		 getMedian();		 
 		 recursiveSplit(points, 0);
 	}
 	
+	private void getMedian() {
+		
+		PointCreator medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
+		System.out.println("First median: " + medianPoint);
+	}
 	
 	private void recursiveSplit(ArrayList<PointCreator> points, int depth) {
 		
@@ -29,17 +39,34 @@ public class KdTree {
 		// there is just one point in each
 		// use recursion
 		
+		if(points.size() <= 1) {
+			System.out.println("Reached the end");
+		}
+		
 		ArrayList<PointCreator> left = new ArrayList<>();
 		ArrayList<PointCreator> right = new ArrayList<>();
+		PointCreator medianPoint = new PointCreator(-1, -1);
 		
 		int axis = depth % 2;
 		
 		if(axis == 0) { // y
-			PointCreator medianPoint = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
+			medianPoint = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
 		} else if(axis == 1) { // x
-			PointCreator medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
+			medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
 		}
 		
+		for(PointCreator point : points) {
+			if((axis == 0 && point.getY() < medianPoint.getY()) ||(axis == 1 && point.getX() < point.getY())) {
+				System.out.println("Added " + point + " to the left");
+				left.add(medianPoint);
+			} else if((axis == 0 && point.getY() > medianPoint.getY()) || (axis == 1 && point.getX() > medianPoint.getY())) {
+				System.out.println("Added " + point + " to the right");
+				right.add(medianPoint);
+			}
+		}
+		
+		recursiveSplit(left, depth + 1);
+		recursiveSplit(right, depth + 1);
 		
 		// idea: Store all median points in an array list?
 	}
