@@ -35,7 +35,8 @@ public class KdTree {
 		System.out.println("First median Y: " + medianPointY);
 	}
 
-	// odd number fuck it up
+	// odd numbers of points fuck it up
+	// right half works
 	
 	private void splitRecursive(ArrayList<PointCreator> points, int depth, int count) {
 		
@@ -62,17 +63,13 @@ public class KdTree {
 			right = quickSelect.filter(points, medianPoint, axis, false);
 		}
 		
-		System.out.println("Left Half " + count + ": " + left);
+		System.out.println("Median split on: " + medianPoint + "on axis: " + axis);
+		
+		//System.out.println("Left Half " + count + ": " + left);
 		System.out.println("Right Half " + count + ": " + right);
 
-		splitRecursive(left, depth + 1, count + 1);
+		//splitRecursive(left, depth + 1, count + 1);
 		splitRecursive(right, depth + 1, count + 1);
 	}
-	
-	// Find the first median of the array, add that as the root
-	// Break the array into two sub arrays, find those medians and make those the children
-	
-	
 
-	
 }
