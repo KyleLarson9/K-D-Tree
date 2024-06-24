@@ -24,7 +24,7 @@ public class KdTree {
 		 }
 		 
 		 getMedian();		 
-		 splitRecursive(points, 0);
+		 splitRecursive(points, 0, 1);
 	}
 	
 	private void getMedian() {
@@ -35,10 +35,11 @@ public class KdTree {
 		System.out.println("First median Y: " + medianPointY);
 	}
 
+	// odd number fuck it up
 	
-	private void splitRecursive(ArrayList<PointCreator> points, int depth) {
+	private void splitRecursive(ArrayList<PointCreator> points, int depth, int count) {
 		
-		if(points.size() == 1) {
+		if(points.size() <= 1) {
 			return;
 		}
 		
@@ -61,9 +62,11 @@ public class KdTree {
 			right = quickSelect.filter(points, medianPoint, axis, false);
 		}
 		
-		System.out.println("Left Half: " + left);
-		System.out.println("Right Half: " + right);
-		
+		System.out.println("Left Half " + count + ": " + left);
+		System.out.println("Right Half " + count + ": " + right);
+
+		splitRecursive(left, depth + 1, count + 1);
+		splitRecursive(right, depth + 1, count + 1);
 	}
 	
 	// Find the first median of the array, add that as the root
