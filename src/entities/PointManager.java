@@ -19,7 +19,7 @@ public class PointManager {
 	
 	public PointManager() {
 		addPoint();
-	}
+	} 
 	
 	public PointManager(App app) {
 		this.app = app;

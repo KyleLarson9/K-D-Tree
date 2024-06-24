@@ -8,10 +8,10 @@ import entities.PointManager;
 public class QuickSelect {
 		
 	public QuickSelect() {
-		
+		 
 	}
 	
-	public ArrayList<PointCreator> filter(ArrayList<PointCreator> points, PointCreator medianPoint, int coordinate, boolean lessThan) {
+	public ArrayList<PointCreator> filterPoints(ArrayList<PointCreator> points, PointCreator medianPoint, int coordinate, boolean lessThan) {
 		
 		ArrayList<PointCreator> filteredPoints = new ArrayList<>();
 		
@@ -19,60 +19,63 @@ public class QuickSelect {
 			throw new IllegalArgumentException("Cannot be null");
 		}
 		
-		for(int i = 0; i < points.size(); i++) {
-			
-			PointCreator currentPoint = points.get(i);
-			
-			if(coordinate == 0) { // x
-				if((lessThan && medianPoint.getX() > currentPoint.getX()) || (!lessThan && medianPoint.getX() < currentPoint.getX())) {
-					filteredPoints.add(currentPoint);
-				} 
-			} else if(coordinate == 1) { // y
-				if((lessThan && currentPoint.getY() < medianPoint.getY()) || (!lessThan && currentPoint.getY() > medianPoint.getY())) {
-					filteredPoints.add(currentPoint);
-				}			
-			}
-			
-		}
+		for (PointCreator currentPoint : points) {
+		      if (coordinate == 0) { // x-axis
+		          if ((lessThan && medianPoint.getX() > currentPoint.getX()) || (!lessThan && medianPoint.getX() <= currentPoint.getX() && !currentPoint.equals(medianPoint))) {
+		              filteredPoints.add(currentPoint);
+		          }
+		      } else { // y-axis
+		          if ((lessThan && medianPoint.getY() > currentPoint.getY()) || (!lessThan && medianPoint.getY() <= currentPoint.getY() && !currentPoint.equals(medianPoint))) {
+		              filteredPoints.add(currentPoint);
+		          }
+		      }
+		  }
 		
 		return filteredPoints;
 		
 	}
 	
-	public ArrayList<PointCreator> filterPoints(ArrayList<PointCreator> points, PointCreator medianPoint, String coordinate, boolean lessThan) {
-		
-		ArrayList<PointCreator> filteredPoints = new ArrayList<>();
-		
-		if(points == null || medianPoint == null || coordinate == null) {
-			throw new IllegalArgumentException("Cannot be null");
+	private int partitionY(ArrayList<PointCreator> points, int low, int high) {
+		PointCreator pivot = points.get(high);
+	    int pivotLocation = low;
+	    for(int i = low; i < high; i++) {
+	    	if(points.get(i).getY() < pivot.getY()) {
+	    		PointCreator temp = points.get(i);
+	    		points.set(i, points.get(pivotLocation));
+	    		points.set(pivotLocation, temp);
+	    		pivotLocation++;
+	    	}
+	    }
+	    
+	    points.set(high, points.get(pivotLocation));
+	    points.set(pivotLocation, pivot);
+	    
+	    return pivotLocation;
+	}
+    
+
+	
+	public PointCreator findMedianY(ArrayList<PointCreator> points, int low, int high, int k) {
+		if(low == high) {
+			return points.get(low);
 		}
-		
-		for(int i = 0; i < points.size(); i++ ) {
-			
-			PointCreator currentPoint = points.get(i);
-			
-			if(coordinate.equals("x")) {
-				if((lessThan && currentPoint.getX() < medianPoint.getX()) || (!lessThan && currentPoint.getX() > medianPoint.getX())) {
-					filteredPoints.add(currentPoint);
-				}
-			} else if(coordinate.equalsIgnoreCase("y")) {
-				if((lessThan && currentPoint.getY() < medianPoint.getY()) || (!lessThan && currentPoint.getY() > medianPoint.getY())) {
-					filteredPoints.add(currentPoint);
-				}
-			}
-			
-		}
-		
-		return filteredPoints;
-		
+		int partitionIndex = partitionY(points, low, high);
+		if(partitionIndex == k) {
+			return points.get(partitionIndex);
+	 	} else if(partitionIndex < k) {
+	      return findMedianY(points, partitionIndex + 1, high, k);
+	 	} else {
+	      return findMedianY(points, low, partitionIndex - 1, k);
+	 	}
 	}
 	
-	public int partitionY(ArrayList<PointCreator> points, int low, int high) {
-        PointCreator pivot = points.get(high);
+	public int partitionX(ArrayList<PointCreator> points, int low, int high) {
+		
+		PointCreator pivot = points.get(high);
         int pivotLocation = low;
         
         for (int i = low; i < high; i++) {
-            if (points.get(i).getY() < pivot.getY()) {
+            if (points.get(i).getX() < pivot.getX()) {
                 PointCreator temp = points.get(i);
                 points.set(i, points.get(pivotLocation));
                 points.set(pivotLocation, temp);
@@ -80,64 +83,25 @@ public class QuickSelect {
             }
         }
         
-        PointCreator temp = points.get(high);
         points.set(high, points.get(pivotLocation));
-        points.set(pivotLocation, temp);
+        points.set(pivotLocation, pivot);
         
         return pivotLocation; // Return the index of the pivot
-    }
-    
-	public PointCreator findMedianY(ArrayList<PointCreator> points, int low, int high, int k) {
-				
-		int partionIndex = partitionY(points, low, high);
-		
-		if(partionIndex == k - 1)
-			return points.get(partionIndex);
-		else if(partionIndex < k - 1)
-			return findMedianY(points, partionIndex + 1, high, k);
-		else 
-			return findMedianY(points, low, partionIndex - 1, k);
 		
 	}
 	
-	public int partitionX(ArrayList<PointCreator> points, int low, int high) {
-		
-		int pivot = points.get(high).getX();
-		int pivotLocation = low;
-		
-		for(int i = low; i < high; i++) {
-			if(points.get(i).getX() < pivot) {
-				
-				//Swap object
-				PointCreator temp = points.get(i);
-				
-				points.set(i, points.get(pivotLocation));
-				points.set(pivotLocation, temp);
-				pivotLocation++;
-
-			}
-		}
-		
-		// Swap pivot point
-		PointCreator temp = points.get(high);
-		points.set(high, points.get(pivotLocation));
-		points.set(pivotLocation, temp);
-		
-		return pivotLocation;
-		
-	}
-	
-	public PointCreator findMedianX(ArrayList<PointCreator> points, int low, int high, int k) {
-		
-		int partitionIndex = partitionX(points, low, high);
-		
-		if(partitionIndex == k - 1)
-			return points.get(partitionIndex);
-		else if(partitionIndex < k - 1)
-			return findMedianX(points, partitionIndex + 1, high, k);
-		else 
-			return findMedianX(points, low, partitionIndex - 1, k);
-		
+	  public PointCreator findMedianX(ArrayList<PointCreator> points, int low, int high, int k) {
+		  if (low == high) {
+		      return points.get(low);
+		  }
+		  int partitionIndex = partitionX(points, low, high);
+		  if (partitionIndex == k) {
+		      return points.get(partitionIndex);
+		  } else if (partitionIndex < k) {
+		      return findMedianX(points, partitionIndex + 1, high, k);
+		  } else {
+		      return findMedianX(points, low, partitionIndex - 1, k);
+		  }
 	}
 	
 	

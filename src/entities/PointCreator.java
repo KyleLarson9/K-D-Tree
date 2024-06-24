@@ -11,7 +11,7 @@ public class PointCreator {
 	}
 		
 	public int getX() {
-		return x;
+		return x; 
 	}
 	
 	public int getY() {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import entities.PointCreator;
 import entities.PointManager;
-
+import tree.Node;
 public class KdTree {
 	
 	private QuickSelect quickSelect;
@@ -12,6 +12,8 @@ public class KdTree {
 	private ArrayList<PointCreator> points;
 	
 	private Node root;
+	
+	// it seems to be adding points somewhat right but the splitting is still messed up
 	
 	public KdTree() {
 		 this.root = null;
@@ -23,24 +25,14 @@ public class KdTree {
 			 System.out.println(point);
 		 }
 		 
-		 getMedian();		 
-		 splitRecursive(points, 0, 1);
-	}
-	
-	private void getMedian() {
-		
-		PointCreator medianPointX = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
-		PointCreator medianPointY = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
-		System.out.println("First median X: " + medianPointX);
-		System.out.println("First median Y: " + medianPointY);
+		 splitRecursive(points, 0);
+		 
+		 display();
 	}
 
-	// odd numbers of points fuck it up
-	// right half works
-	
-	private void splitRecursive(ArrayList<PointCreator> points, int depth, int count) {
+	private void splitRecursive(ArrayList<PointCreator> points, int depth) {
 		
-		if(points.size() <= 1) {
+		if(points.size() == 0) {
 			return;
 		}
 		
@@ -55,21 +47,60 @@ public class KdTree {
 		
 		ArrayList<PointCreator> left = new ArrayList<>();
 		ArrayList<PointCreator> right = new ArrayList<>();
-		if(axis == 0) {
-			left = quickSelect.filter(points, medianPoint, axis, true);
-			right = quickSelect.filter(points, medianPoint, axis, false);
-		} else if(axis == 1) {
-			left = quickSelect.filter(points, medianPoint, axis, true);
-			right = quickSelect.filter(points, medianPoint, axis, false);
-		}
 		
-		System.out.println("Median split on: " + medianPoint + "on axis: " + axis);
+		left = quickSelect.filterPoints(points, medianPoint, axis, true);
+		right = quickSelect.filterPoints(points, medianPoint, axis, false);
+				
+		System.out.println("Median split on: " + medianPoint + " on axis: " + axis);
 		
-		//System.out.println("Left Half " + count + ": " + left);
-		System.out.println("Right Half " + count + ": " + right);
-
-		//splitRecursive(left, depth + 1, count + 1);
-		splitRecursive(right, depth + 1, count + 1);
+		points.remove(medianPoint);
+		
+		Node currentMedian = new Node(medianPoint, axis);
+		insert(currentMedian);
+		
+		splitRecursive(left, depth + 1);
+		splitRecursive(right, depth + 1);
 	}
 
+	public void insert(Node node) {
+		
+		root = insertHelper(root, node);
+		
+	}
+	
+	private Node insertHelper(Node root, Node node) {
+		
+		PointCreator median = node.point;
+		int axis = node.axis; // 0 == x, 1 == y
+		
+		if(root == null) {
+			root = node;
+			return root;
+		} else if((axis == 0 && median.getX() > root.point.getX()) || (axis == 1 && median.getY() > root.point.getY())) {
+			root.left = insertHelper(root.left, node);
+		} else if((axis == 0 && median.getX() < root.point.getX()) || (axis == 1 && median.getY() < root.point.getY())){
+			root.right = insertHelper(root.right, node);
+		}
+		
+		return root;
+	}
+	
+	public void display() {
+		
+		displayHelper(root);
+		
+	}
+	
+	private void displayHelper(Node root) {
+		
+		if(root != null) { // in order traversal
+			System.out.println("Point: " + root.point + ", axis: " + root.axis);
+			displayHelper(root.left);
+			displayHelper(root.right);
+		}
+		
+	}
+	
+	
 }
+
