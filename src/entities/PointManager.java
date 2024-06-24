@@ -15,7 +15,7 @@ public class PointManager {
 	
 	private ArrayList<PointCreator> points = new ArrayList<>();
 	
-	private int totalPoints = 5;
+	private int totalPoints = 8;
 	
 	public PointManager() {
 		addPoint();

@@ -24,108 +24,52 @@ public class KdTree {
 		 }
 		 
 		 getMedian();		 
-		 recursiveSplit(points, 0);
+		 splitRecursive(points, 0);
 	}
 	
 	private void getMedian() {
 		
-		PointCreator medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
-		System.out.println("First median: " + medianPoint);
+		PointCreator medianPointX = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
+		PointCreator medianPointY = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
+		System.out.println("First median X: " + medianPointX);
+		System.out.println("First median Y: " + medianPointY);
 	}
+
 	
-	private void recursiveSplit(ArrayList<PointCreator> points, int depth) {
+	private void splitRecursive(ArrayList<PointCreator> points, int depth) {
 		
-		// find a way to then split the left and right arrays on y, and flip that every time until
-		// there is just one point in each
-		// use recursion
+		if(points.size() == 1) {
+			return;
+		}
 		
-		if(points.size() <= 1) {
-			System.out.println("Reached the end");
+		int axis = depth % 2;
+		
+		PointCreator medianPoint = new PointCreator(-1, -1);
+		if(axis == 0) { //  x
+			medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
+		} else if(axis == 1) {
+			medianPoint = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
 		}
 		
 		ArrayList<PointCreator> left = new ArrayList<>();
 		ArrayList<PointCreator> right = new ArrayList<>();
-		PointCreator medianPoint = new PointCreator(-1, -1);
-		
-		int axis = depth % 2;
-		
-		if(axis == 0) { // y
-			medianPoint = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
-		} else if(axis == 1) { // x
-			medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
+		if(axis == 0) {
+			left = quickSelect.filter(points, medianPoint, axis, true);
+			right = quickSelect.filter(points, medianPoint, axis, false);
+		} else if(axis == 1) {
+			left = quickSelect.filter(points, medianPoint, axis, true);
+			right = quickSelect.filter(points, medianPoint, axis, false);
 		}
 		
-		for(PointCreator point : points) {
-			if((axis == 0 && point.getY() < medianPoint.getY()) ||(axis == 1 && point.getX() < point.getY())) {
-				System.out.println("Added " + point + " to the left");
-				left.add(medianPoint);
-			} else if((axis == 0 && point.getY() > medianPoint.getY()) || (axis == 1 && point.getX() > medianPoint.getY())) {
-				System.out.println("Added " + point + " to the right");
-				right.add(medianPoint);
-			}
-		}
+		System.out.println("Left Half: " + left);
+		System.out.println("Right Half: " + right);
 		
-		recursiveSplit(left, depth + 1);
-		recursiveSplit(right, depth + 1);
-		
-		// idea: Store all median points in an array list?
 	}
-
+	
+	// Find the first median of the array, add that as the root
+	// Break the array into two sub arrays, find those medians and make those the children
 	
 	
 
 	
 }
-
-
-//private Node insertRecursive(Node root, Node node, int depth, ArrayList<PointCreator> points) {
-//	
-//	if(root == null) {
-//		root = node;
-//		return root;
-//	}
-//	
-//	int axis = depth % 2;
-//
-//	// find median point
-//	
-//	PointCreator medianPoint = null;
-//	
-//	if(axis == 0) { // x
-//		medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
-//	} else if(axis == 1) { // y
-//		medianPoint = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
-//
-//	}
-//	
-//	// split the points into to lists
-//	
-//	ArrayList<PointCreator> leftPoints = new ArrayList<>(); // points less than median
-//	ArrayList<PointCreator> rightPoints = new ArrayList<>(); // points greater than median
-//	
-//	if(axis == 0) {
-//		leftPoints = quickSelect.pointsLessThanMedianX(leftPoints, medianPoint);
-//		rightPoints = quickSelect.pointsGreaterThanMedianX(rightPoints, medianPoint);
-//	} else {
-//		leftPoints = quickSelect.pointsLessThanMedianY(leftPoints, medianPoint);
-//		rightPoints = quickSelect.pointsGreaterThanMedianY(rightPoints, medianPoint);
-//	}
-//	
-//	// insert  the points
-//	
-//	if(axis == 0) { // x axis
-//		if(node.point.getX() < root.point.getX()) {
-//			root.left = insertRecursive(root.left, node, depth + 1, leftPoints);
-//		} else {
-//			root.right = insertRecursive(root.right, node, depth + 1, rightPoints);
-//		}
-//	} else if(axis == 1) { // y axis
-//		if(node.point.getY() < root.point.getY()) {
-//			root.left = insertRecursive(root.left, node, depth + 1, leftPoints);
-//		} else {
-//			root.right = insertRecursive(root.right, node, depth + 1, rightPoints);
-//		}
-//	}
-//
-//	return root;
-//}

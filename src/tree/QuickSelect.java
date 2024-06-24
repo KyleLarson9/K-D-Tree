@@ -6,15 +6,37 @@ import entities.PointCreator;
 import entities.PointManager;
 
 public class QuickSelect {
-	
-	private PointManager pointManager;
-	
+		
 	public QuickSelect() {
 		
 	}
 	
-	public QuickSelect(PointManager pointManager) {
-		this.pointManager = pointManager;
+	public ArrayList<PointCreator> filter(ArrayList<PointCreator> points, PointCreator medianPoint, int coordinate, boolean lessThan) {
+		
+		ArrayList<PointCreator> filteredPoints = new ArrayList<>();
+		
+		if(points == null || medianPoint == null) {
+			throw new IllegalArgumentException("Cannot be null");
+		}
+		
+		for(int i = 0; i < points.size(); i++) {
+			
+			PointCreator currentPoint = points.get(i);
+			
+			if(coordinate == 0) { // x
+				if((lessThan && medianPoint.getX() > currentPoint.getX()) || (!lessThan && medianPoint.getX() < currentPoint.getX())) {
+					filteredPoints.add(currentPoint);
+				} 
+			} else if(coordinate == 1) { // y
+				if((lessThan && currentPoint.getY() < medianPoint.getY()) || (!lessThan && currentPoint.getY() > medianPoint.getY())) {
+					filteredPoints.add(currentPoint);
+				}			
+			}
+			
+		}
+		
+		return filteredPoints;
+		
 	}
 	
 	public ArrayList<PointCreator> filterPoints(ArrayList<PointCreator> points, PointCreator medianPoint, String coordinate, boolean lessThan) {
