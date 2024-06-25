@@ -13,13 +13,12 @@ public class PointManager {
 	private Random rand = new Random();
 	private App app;
 	
-	private ArrayList<PointCreator> points = new ArrayList<>();
+	private static ArrayList<PointCreator> points = new ArrayList<>(); // classes reference the same list
 	
-	private int totalPoints = 1000;
+	private int totalPoints = 8;
 	
 	public PointManager() {
 		
-		addPoint();
 	} 
 	
 	public PointManager(App app) {
