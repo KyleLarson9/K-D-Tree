@@ -22,7 +22,7 @@ public class App {
 		
 	public App() {	
 		initializeClasses();
-		
+		 
 		panel.setFocusable(true);
 		panel.requestFocus();
 		
