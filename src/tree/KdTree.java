@@ -13,7 +13,6 @@ public class KdTree {
 	
 	private Node root;
 	
-	// it seems to be adding points somewhat right but the splitting is still messed up
 	
 	public KdTree() {
 		 this.root = null;
@@ -21,19 +20,11 @@ public class KdTree {
 		 pointManager = new PointManager();
 		 points = pointManager.getPoints();
 		 
-		 for(PointCreator point : points) {
-			 System.out.println(point);
-		 }
-		 
 		 split(points, 0);
 		 
 		 printLevelOrder();
 	}
 
-	// It doesn't necessarly swap after every turn, each depth should be the same. I don't think this is doing that
-	
-	// add all the children of the left node before moving onto the right one
-	
 	private void split(ArrayList<PointCreator> points, int depth) {
 
 	    // Base case: if there are no points, return
@@ -58,50 +49,9 @@ public class KdTree {
 	    ArrayList<PointCreator> right = quickSelect.filterPoints(points, medianPoint, axis, false);
 
 	    // Recursively split the left and right subtrees
-	    splitRecursive(left, depth + 1);
-	    splitRecursive(right, depth + 1);
-	}
-
-
-	private void splitRecursive(ArrayList<PointCreator> points, int depth) {
-
-		// find a way to stop the left recursion if its done and keep doing the right one
-
-		if(points.isEmpty()) {
-			return;
-		}
-
-		int axis = depth % 2;
-
-		PointCreator medianPoint = new PointCreator(-1, -1);
-		if(axis == 0) { //  x
-			medianPoint = quickSelect.findMedianX(points, 0, points.size() - 1, points.size()/2);
-		} else if(axis == 1) {
-			medianPoint = quickSelect.findMedianY(points, 0, points.size() - 1, points.size()/2);
-		}
-
-		Node currentMedian = new Node(medianPoint, axis);
-		insert(currentMedian);
-
-		ArrayList<PointCreator> left = new ArrayList<>();
-		ArrayList<PointCreator> right = new ArrayList<>();
-
-		left = quickSelect.filterPoints(points, medianPoint, axis, true);
-		right = quickSelect.filterPoints(points, medianPoint, axis, false);
-				
-		//System.out.println("Median split on: " + medianPoint + " on axis: " + axis);	
-
-		if(!left.isEmpty()) {
-			//System.out.println("Left list: " + left);
-			splitRecursive(left, depth + 1);
-		}
-			
-		if(!right.isEmpty()) {
-			//System.out.println("Right list: " + right);
-			splitRecursive(right, depth + 1);
-		}
-
-	}
+	    split(left, depth + 1);
+	    split(right, depth + 1);
+	} 
 	
 	private void insert(Node node) {
 	    if (root == null) {
