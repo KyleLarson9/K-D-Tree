@@ -30,6 +30,8 @@ public class App {
 	public final static int APP_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 	
 	private static int x, y;
+	 
+	private Node nextNode;
 	
 	public App() {	
 		initializeClasses();
@@ -38,11 +40,7 @@ public class App {
 		panel.requestFocus();
 		
 		myPoint();
-		
-		System.out.println(x + ", " + y);
-		
-
-		
+			
 	}
 	
 	public void render(Graphics2D g2d) {
@@ -52,12 +50,16 @@ public class App {
 		g2d.setColor(Color.black);
 		g2d.fill(new Ellipse2D.Double(x - 5, y - 5, 10, 10));
 		
-		PointCreator currentClosest = getClosestPoint(x, y, kdTree.root, closestPoint, 0);
+		PointCreator currentClosest = closestPoint(x, y, kdTree.root, closestPoint, 0);
 		
-		System.out.println("Closest Point: " + currentClosest);
+		if(currentClosest != null) {
+			System.out.println("Closest Point: " + currentClosest);
+			
+			g2d.setColor(Color.red);
+			g2d.draw(new Ellipse2D.Double(currentClosest.getX() - 10, currentClosest.getY() - 10, 20, 20));		
+		}
 		
-		g2d.setColor(Color.red);
-		g2d.draw(new Ellipse2D.Double(currentClosest.getX() - 10, currentClosest.getY() - 10, 20, 20));
+	
 	}
 	
 	// private methods
@@ -77,50 +79,55 @@ public class App {
 		myPoint = new PointCreator(x, y);
 	
 	}
-	private PointCreator getClosestPoint(int pointX, int pointY, Node currentNode, PointCreator closestPoint, int depth) {
+	
+	// Things to fix: sometimes the closest point is on the other side that was eliminated
+	// Make the way back up the tree to check that there are no hidden points
+	// Visit a different node if there is a chance the point can be there (where it hasn't looked)]\
+	
+	private PointCreator closestPoint(int targetX, int targetY, Node currentNode, PointCreator closestPoint, int depth) {
 		
 		if(currentNode == null) {
-			return null;
+			return closestPoint;
 		}
 		
-		int height = kdTree.height(currentNode);
-		System.out.println("Height: " + height);
+		int axis = depth % 2;
+		double currentClosestDistance = 1_000_000;
+		Node nextNode = null;
 		
-		Node closestCurrentNode = null;
+		// find distance between target point and current closest point (root node) and set that as the new closest distance
+		double distance = Math.sqrt(Math.pow(targetX - currentNode.point.getX(), 2) + Math.pow(targetY - currentNode.point.getY(), 2));
 		
-		closestPoint = null;
-		int axis = currentNode.axis; 
+		if(distance < currentClosestDistance) {
+			currentClosestDistance = distance;
+			closestPoint = currentNode.point;
+		}
 		
-		if(axis == 0) {
-			if(pointX > currentNode.point.getX()) {
-				closestPoint = currentNode.right.point;
-				closestCurrentNode = currentNode.right;
-			} else if(pointX < currentNode.point.getX()) {
-				closestPoint = currentNode.left.point;
-				closestCurrentNode = currentNode.left;
+		// find the next node to explore based on if the x or y value is greater than or less than, what to do if it equals?
+		if(axis == 0) { // x
+			
+			if(targetX > currentNode.point.getX()) {
+				nextNode = currentNode.right;
+			} else {
+				nextNode = currentNode.left;
 			}
-		} else if(axis == 1) {
-			if(pointY > currentNode.point.getY()) {
-				closestPoint = currentNode.right.point;
-				closestCurrentNode = currentNode.right;
-			} else if(pointY < currentNode.point.getY()) {
-				closestPoint = currentNode.left.point;
-				closestCurrentNode = currentNode.left;
+			
+		} else if(axis == 1) { // y
+			if(targetY > currentNode.point.getY()) {
+				nextNode = currentNode.right;
+			} else {
+				nextNode = currentNode.left;
 			}
 		}
 		
-		if(pointY > closestPoint.getY()) {
-			closestPoint = closestCurrentNode.right.point;
-		} else {
-			closestPoint = closestCurrentNode.left.point;
-		}
+		// work back up the tree to make sure there aren't hidden points
+		// get the final minimum distance
+		// then check if the point above is within that minimum distance based on the axis?
 		
-		// then check that current points y, and find if the pointY is greater or less than
-		// I might not have to do recursion 
 		
-		return closestPoint;
+		return closestPoint(targetX, targetY, nextNode, closestPoint, depth + 1);
 		
 	}
+
 }
 
 

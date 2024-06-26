@@ -27,17 +27,7 @@ public class KdTree {
 		printLevelOrder();
 	}
 	
-	public void render(Graphics2D g2d) {
-	    if (root != null) {
-	        int width = 1000;  // Example width of the panel
-	        int height = 1000; // Example height of the panel
-	        axisLines(g2d, root, 0, width, 0, height, 0);
-	    }
-	    
-	}
-	
 	private void split(ArrayList<PointCreator> points, int depth) {
-		// Base case: if there are no points, return
 		if (points.isEmpty()) {
 			return;
 		}
@@ -101,6 +91,17 @@ public class KdTree {
 				return (rightHeight + 1);
 			}
 		}
+	}
+	
+	// ********Methods For Visual Purposes*******
+	
+	public void render(Graphics2D g2d) {
+	    if (root != null) {
+	        int width = 1000;  // Example width of the panel
+	        int height = 1000; // Example height of the panel
+	        axisLines(g2d, root, 0, width, 0, height, 0);
+	    }
+	    
 	}
 	
 	private void printLevelOrder() {
