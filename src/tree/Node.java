@@ -2,7 +2,7 @@ package tree;
 
 import entities.PointCreator;
 
-class Node {
+public class Node {
 	
     public PointCreator point;
     public int axis;
@@ -13,6 +13,6 @@ class Node {
         this.point = point;
         this.axis = axis;
         this.left = null;
-        this.right = null;
+        this.right = null; 
     }
 }

@@ -15,11 +15,11 @@ public class PointManager {
 	
 	private static ArrayList<PointCreator> points = new ArrayList<>(); // classes reference the same list
 	
-	private int totalPoints = 8;
+	private int totalPoints = 10;
 	
 	public PointManager() {
 		
-	} 
+	}     
 	
 	public PointManager(App app) {
 		this.app = app;
@@ -40,7 +40,7 @@ public class PointManager {
 		return points.get(i).getX();
 	}
 	
-	public int getCurrentY(int i) {
+	public int getCurrentY(int i) { 
 		return points.get(i).getY();
 	}
 	

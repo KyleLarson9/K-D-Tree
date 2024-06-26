@@ -13,7 +13,7 @@ public class KdTree {
 	private PointManager pointManager;
 	private ArrayList<PointCreator> points;
 	
-	private Node root;
+	public Node root;
 
 	public KdTree() {
 		this.root = null;
@@ -24,7 +24,7 @@ public class KdTree {
 				
 		split(points, 0);
 		
-		//printLevelOrder();
+		printLevelOrder();
 	}
 	
 	public void render(Graphics2D g2d) {
@@ -88,7 +88,7 @@ public class KdTree {
 		}
 	}
 	
-	private int height(Node root) {
+	public int height(Node root) {
 		if (root == null) {
 			return 0;
 		} else {

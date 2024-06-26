@@ -9,7 +9,7 @@ public class QuickSelect {
 		
 	public QuickSelect() {
 		 
-	}
+	} 
 	
 	public ArrayList<PointCreator> filterPoints(ArrayList<PointCreator> points, PointCreator medianPoint, int coordinate, boolean lessThan) {
 		
