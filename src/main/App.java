@@ -7,20 +7,24 @@ import java.util.Random;
 
 import entities.PointCreator;
 import entities.PointManager;
+import inputs.MouseInputs;
 import tree.KdTree;
 import tree.Node;
 
 public class App {
 	
-	protected AppPanel panel;
+	public AppPanel panel;
 	private AppFrame frame;
 	private PointManager pointManager;
 	private KdTree kdTree;
-	private PointCreator closestPoint;
+	private MouseInputs mouseInputs;
+	private Random rand = new Random(); 
+	
+	private PointCreator closestPoint; 
 	private PointCreator currentClosestPoint;
+	
 	double closestDistance = 1000000;
 	
-	private Random rand = new Random(); 
 	
 	private final static int TILES_DEFAULT_SIZE = 20;
 	private final static float SCALE = 1.0f;
@@ -30,17 +34,19 @@ public class App {
 	public final static int APP_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
 	public final static int APP_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 	
-	private static int x, y;
+	public static int myPointX, myPointY;
 	 	
 	public App() {	
+		
+		myPoint();
 		initializeClasses();
 		 
 		panel.setFocusable(true);
 		panel.requestFocus();
+				
+		System.out.println("My Point: " + myPointX + ", " + myPointY);
 		
-		myPoint();
-		
-		currentClosestPoint = closestPoint(x, y, kdTree.root, closestPoint, 0);
+		currentClosestPoint = closestPoint(myPointX, myPointY, kdTree.root, closestPoint, 0);
 				
 	}
 	
@@ -49,7 +55,7 @@ public class App {
 		//kdTree.render(g2d);
 
 		g2d.setColor(Color.black);
-		g2d.fill(new Ellipse2D.Double(x - 5, y - 5, 10, 10));
+		g2d.fill(new Ellipse2D.Double(myPointX - 5, myPointY - 5, 10, 10));
 		
 		
 		if(currentClosestPoint != null) {
@@ -64,18 +70,21 @@ public class App {
 	// private methods
 	
 	private void initializeClasses() {
+		mouseInputs = new MouseInputs(this);
 		pointManager = new PointManager(this);
 		panel = new AppPanel(this);
 		frame = new AppFrame(panel);
 		kdTree = new KdTree();
+		panel.addMouseMotionListener(mouseInputs);
+		panel.addMouseListener(mouseInputs);
 	}
 	
 	private void myPoint() {
 		
-		x = rand.nextInt(APP_WIDTH);
-		y = rand.nextInt(APP_HEIGHT);
+		myPointX = rand.nextInt(APP_WIDTH);
+		myPointY = rand.nextInt(APP_HEIGHT);
 		
-		PointCreator myPoint = new PointCreator(x, y);
+		PointCreator myPoint = new PointCreator(myPointX, myPointY);
 	
 	}
 

@@ -11,11 +11,11 @@ public class MouseInputs extends MouseAdapter implements MouseMotionListener, Mo
 
 	private int x, y;
 	private App app;
+	private boolean dragging = false;
 	
 	public MouseInputs(App app) {
 		this.app = app;
 		
-		System.out.println("My Point: " + App.x + ", " + App.y);
 	}
 	
 	public int getX() {
@@ -27,15 +27,35 @@ public class MouseInputs extends MouseAdapter implements MouseMotionListener, Mo
 	}
 	
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		
+	public void mousePressed(MouseEvent e) {
 		x = e.getX();
 		y = e.getY();
 		
-		if(App.x == x && App.y == y) {
-			System.out.println("test");
+		if(Math.abs(App.myPointX - x) <= 5 && Math.abs(App.myPointY - y) <= 5) {
+			dragging = true;
 		}
-
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		dragging = false;
+	}
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		x = e.getX();
+		y = e.getY();
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if(dragging) {
+			x = e.getX();
+			y = e.getY();
+			App.myPointX = x;
+			App.myPointY = y;
+			app.panel.repaint();
+		}
 	}
 	
 }
