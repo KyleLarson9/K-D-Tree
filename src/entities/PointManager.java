@@ -14,8 +14,8 @@ public class PointManager {
 	private App app;
 	
 	private static ArrayList<PointCreator> points = new ArrayList<>(); // classes reference the same list
-	
-	private int totalPoints = 10;
+	 
+	private int totalPoints = 50;
 	
 	public PointManager() {
 		
@@ -25,7 +25,7 @@ public class PointManager {
 		this.app = app;
 				
 		addPoint();
-	}
+	} 
 	
 	public void renderPoints(Graphics2D g2d) {
 		

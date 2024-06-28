@@ -11,8 +11,8 @@ public class AppLoop extends App implements Runnable {
 	public void startSimLoop() {
 		thread = new Thread(this);
 		thread.start();
-	}
-	
+	} 
+	 
 	@Override
 	public void run() {		
 		double timePerFrame = 1_000_000_000.0 / FPS; // how long each from will last, 1 second

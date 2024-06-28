@@ -4,7 +4,7 @@ import entities.PointCreator;
 
 public class Node {
 	
-    public PointCreator point;
+    public PointCreator point; 
     public int axis;
     public Node left;
     public Node right;

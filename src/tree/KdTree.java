@@ -24,7 +24,7 @@ public class KdTree {
 				
 		split(points, 0);
 		
-		printLevelOrder();
+		//printLevelOrder();
 	}
 	
 	private void split(ArrayList<PointCreator> points, int depth) {
@@ -139,7 +139,7 @@ public class KdTree {
 	private void axisLines(Graphics2D g2d, Node node, int minX, int maxX, int minY, int maxY, int axisCount) {
 	    if (node == null) {
 	        return;
-	    }
+	    } 
 	    
 	    int x = (int) node.point.getX();
 	    int y = (int) node.point.getY();
