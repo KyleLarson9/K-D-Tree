@@ -17,6 +17,6 @@ In this project, I learned more about the tree data structure, specifically a bi
 
 References
 
-  Authors: Donal Fussell, K.R. Subramanian
-  Title: Fast Ray Tracing Using K-D Trees
-  Link: https://people.computing.clemson.edu/~dhouse/courses/405/papers/KDTrees-07.pdf
+- Authors: Donal Fussell, K.R. Subramanian
+- Title: Fast Ray Tracing Using K-D Trees
+- Link: https://people.computing.clemson.edu/~dhouse/courses/405/papers/KDTrees-07.pdf
