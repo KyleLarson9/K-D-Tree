@@ -10,17 +10,19 @@ import main.App;
 
 public class PointManager {
 
+	// can I make a graph of the time complexity
+	
 	private Random rand = new Random();
 	private App app;
 	
 	private static ArrayList<PointCreator> points = new ArrayList<>(); // classes reference the same list
 	 
-	private int totalPoints = 50;
+	private int totalPoints = 100;
 	
 	public PointManager() {
 		
 	}     
-	
+	 
 	public PointManager(App app) {
 		this.app = app;
 				
@@ -30,7 +32,7 @@ public class PointManager {
 	public void renderPoints(Graphics2D g2d) {
 		
 		for(PointCreator point : points) {
-			g2d.setColor(randomColor());   
+			g2d.setColor(Color.green);   
 			g2d.fill(new Ellipse2D.Double(point.getX() - 2.5, point.getY() - 2.5, 5, 5));
 		}
 		

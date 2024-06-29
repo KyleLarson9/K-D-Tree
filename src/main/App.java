@@ -23,8 +23,7 @@ public class App {
 	private PointCreator closestPoint; 
 	private PointCreator currentClosestPoint;
 	
-	double closestDistance = 1000000;
-	
+	double closestDistance;
 	
 	private final static int TILES_DEFAULT_SIZE = 20;
 	private final static float SCALE = 1.0f;
@@ -40,14 +39,17 @@ public class App {
 		
 		myPoint();
 		initializeClasses();
-		 
+		
+		
 		panel.setFocusable(true);
 		panel.requestFocus();
-				
-		System.out.println("My Point: " + myPointX + ", " + myPointY);
-		
+		//updateClosestPoint();			
+	}
+	
+	public void updateClosestPoint() {
+		closestDistance = 1000000;
 		currentClosestPoint = closestPoint(myPointX, myPointY, kdTree.root, closestPoint, 0);
-				
+
 	}
 	
 	public void render(Graphics2D g2d) {
@@ -88,65 +90,64 @@ public class App {
 	
 	}
 
-	  private PointCreator closestPoint(int targetX, int targetY, Node currentNode, PointCreator closestPoint, int depth) {
-	        if(currentNode == null) {
-	            return closestPoint;
-	        }
+	private PointCreator closestPoint(int targetX, int targetY, Node currentNode, PointCreator closestPoint, int depth) {
+		if(currentNode == null) {
+			return closestPoint;
+	    }
 
-	        int axis = depth % 2;
+	    int axis = depth % 2;
 
-	        // Calculate distance from the target point to the current node
-	        double distance = Math.sqrt(Math.pow(targetX - currentNode.point.getX(), 2) + Math.pow(targetY - currentNode.point.getY(), 2));
+	    // Calculate distance from the target point to the current node
+	    double distance = Math.sqrt(Math.pow(targetX - currentNode.point.getX(), 2) + Math.pow(targetY - currentNode.point.getY(), 2));
+	    
+	    // Update closestDistance and closestPoint if a closer point is found
+	    if(distance < closestDistance) {
+	    	closestDistance = distance;
+	    	closestPoint = currentNode.point; 
+	    }
 
-	        // Update closestDistance and closestPoint if a closer point is found
-	        if (distance < closestDistance) {
-	            closestDistance = distance;
-	            closestPoint = currentNode.point; 
-	        }
-
-	        Node nextNode;
-	        Node otherNode;
+	    Node nextNode;
+	    Node otherNode;
 
 	        // Choose the next node to explore
-	        if(axis == 0) { // x
-	            if(targetX > currentNode.point.getX()) {
-	                nextNode = currentNode.right;
-	                otherNode = currentNode.left;
-	            } else {
-	                nextNode = currentNode.left;
-	                otherNode = currentNode.right;
-	            }
-	        } else { // y
-	            if(targetY > currentNode.point.getY()) {
-	                nextNode = currentNode.right;
-	                otherNode = currentNode.left;
-	            } else {
-	                nextNode = currentNode.left;
-	                otherNode = currentNode.right;
-	            }
+	    if(axis == 0) { // x
+	    	if(targetX > currentNode.point.getX()) {
+	    		nextNode = currentNode.right;
+	    		otherNode = currentNode.left;
+	    	} else {
+	    		nextNode = currentNode.left;
+	    		otherNode = currentNode.right;
+	    	}
+	    } else { // y
+	    	if(targetY > currentNode.point.getY()) {
+	    		nextNode = currentNode.right;
+	            otherNode = currentNode.left;
+	    	} else {
+	            nextNode = currentNode.left;
+	            otherNode = currentNode.right;
 	        }
+	   }
 
-	        // Recursively search the next node
-	        closestPoint = closestPoint(targetX, targetY, nextNode, closestPoint, depth + 1);
+	    // Recursively search the next node
+	    closestPoint = closestPoint(targetX, targetY, nextNode, closestPoint, depth + 1);
 
-	        // Check if need to explore the other side of the split
-	        double axisDistance;
-	        if(axis == 0) {
-	            axisDistance = Math.abs(targetX - currentNode.point.getX());
-	        } else {
-	            axisDistance = Math.abs(targetY - currentNode.point.getY());
-	        }
-
-	        if(axisDistance < closestDistance && otherNode != null) {
-	        	
-	        	double testDistance = Math.sqrt(Math.pow(targetX - otherNode.point.getX(), 2) + Math.pow(targetY - otherNode.point.getY(), 2));
-	        	
-	        	if(testDistance < closestDistance) {
-		            closestPoint = closestPoint(targetX, targetY, otherNode, closestPoint, depth + 1);	        		
-	        	}
-	   
-	        }
-
-	        return closestPoint;
+	    // Check if need to explore the other side of the split
+	    double axisDistance;
+	    if(axis == 0) {
+	    	axisDistance = Math.abs(targetX - currentNode.point.getX());
+	    } else {
+	        axisDistance = Math.abs(targetY - currentNode.point.getY());
 	    }
+
+	    if(axisDistance < closestDistance && otherNode != null) {
+	        	
+	    	double testDistance = Math.sqrt(Math.pow(targetX - otherNode.point.getX(), 2) + Math.pow(targetY - otherNode.point.getY(), 2));
+	        	
+		    closestPoint = closestPoint(targetX, targetY, otherNode, closestPoint, depth + 1);	        		
+		    
+	   
+	    }
+
+	    return closestPoint;
 	}
+}

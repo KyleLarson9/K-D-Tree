@@ -24,7 +24,6 @@ public class KdTree {
 				
 		split(points, 0);
 		
-		//printLevelOrder();
 	}
 	
 	private void split(ArrayList<PointCreator> points, int depth) {

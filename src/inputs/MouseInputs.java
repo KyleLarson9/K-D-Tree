@@ -55,6 +55,7 @@ public class MouseInputs extends MouseAdapter implements MouseMotionListener, Mo
 			App.myPointX = x;
 			App.myPointY = y;
 			app.panel.repaint();
+			app.updateClosestPoint();
 		}
 	}
 	

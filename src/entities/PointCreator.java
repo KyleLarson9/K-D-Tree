@@ -15,7 +15,7 @@ public class PointCreator {
 	}
 	
 	public int getY() {
-		return y;
+		return y; 
 	}
 
 	@Override

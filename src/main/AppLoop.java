@@ -10,7 +10,7 @@ public class AppLoop extends App implements Runnable {
 	
 	public void startSimLoop() {
 		thread = new Thread(this);
-		thread.start();
+		thread.start(); 
 	} 
 	 
 	@Override
@@ -35,6 +35,7 @@ public class AppLoop extends App implements Runnable {
 			previousTime = currentTime;
 			
 			if(deltaU >= 1) {
+				updateClosestPoint();
 				updates++;
 				deltaU--;
 			}
@@ -47,6 +48,7 @@ public class AppLoop extends App implements Runnable {
 			
 			if(System.currentTimeMillis() - lastCheck >= 1000) {
 				lastCheck = System.currentTimeMillis();
+				System.out.println("FPS: " + frames);
 				frames = 0;
 				updates = 0;
 			}
