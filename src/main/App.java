@@ -43,8 +43,9 @@ public class App {
 		
 		panel.setFocusable(true);
 		panel.requestFocus();
-		//updateClosestPoint();			
 	}
+	
+	// public methods
 	
 	public void updateClosestPoint() {
 		closestDistance = 1000000;
@@ -54,19 +55,15 @@ public class App {
 	
 	public void render(Graphics2D g2d) {
 		pointManager.renderPoints(g2d);
-		//kdTree.render(g2d);
 
 		g2d.setColor(Color.black);
 		g2d.fill(new Ellipse2D.Double(myPointX - 5, myPointY - 5, 10, 10));
 		
-		
 		if(currentClosestPoint != null) {
-			
 			g2d.setColor(Color.red);
 			g2d.draw(new Ellipse2D.Double(currentClosestPoint.getX() - 10, currentClosestPoint.getY() - 10, 20, 20));		
 		}
 		
-	
 	}
 	
 	// private methods
@@ -140,12 +137,9 @@ public class App {
 	    }
 
 	    if(axisDistance < closestDistance && otherNode != null) {
-	        	
-	    	double testDistance = Math.sqrt(Math.pow(targetX - otherNode.point.getX(), 2) + Math.pow(targetY - otherNode.point.getY(), 2));
-	        	
+	        		     	
 		    closestPoint = closestPoint(targetX, targetY, otherNode, closestPoint, depth + 1);	        		
 		    
-	   
 	    }
 
 	    return closestPoint;

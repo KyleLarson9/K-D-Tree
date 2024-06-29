@@ -96,8 +96,8 @@ public class KdTree {
 	
 	public void render(Graphics2D g2d) {
 	    if (root != null) {
-	        int width = 1000;  // Example width of the panel
-	        int height = 1000; // Example height of the panel
+	        int width = 1000;  
+	        int height = 1000; 
 	        axisLines(g2d, root, 0, width, 0, height, 0);
 	    }
 	    

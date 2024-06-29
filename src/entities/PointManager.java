@@ -9,13 +9,11 @@ import java.util.Random;
 import main.App;
 
 public class PointManager {
-
-	// can I make a graph of the time complexity
 	
 	private Random rand = new Random();
 	private App app;
 	
-	private static ArrayList<PointCreator> points = new ArrayList<>(); // classes reference the same list
+	private static ArrayList<PointCreator> points = new ArrayList<>();
 	 
 	private int totalPoints = 100;
 	
@@ -72,14 +70,6 @@ public class PointManager {
 	
 	private int yCoor() {
 		return rand.nextInt(App.APP_HEIGHT);
-	}
-	
-	private Color randomColor() {
-		int r = rand.nextInt(256);
-		int g = rand.nextInt(256);
-		int b = rand.nextInt(256);
-		
-		return new Color(r, g, b);
 	}
 	
 }

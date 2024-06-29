@@ -15,7 +15,7 @@ public class AppLoop extends App implements Runnable {
 	 
 	@Override
 	public void run() {		
-		double timePerFrame = 1_000_000_000.0 / FPS; // how long each from will last, 1 second
+		double timePerFrame = 1_000_000_000.0 / FPS;
 		double timePerUpdate = 1_000_000_000.0 / UPS;
 		
 		long previousTime = System.nanoTime();
